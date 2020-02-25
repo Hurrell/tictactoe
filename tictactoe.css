@@ -1,0 +1,25 @@
+main{
+    font-family: 'Krona One';
+    align-content: center;
+    background-color: azure
+}
+
+#board {
+    color: azure;
+    /* margin: 40px; */
+    text-align: center;
+    font-size: 30vw;
+    display: grid;
+    grid-template-columns: repeat(3, 30vw);
+    grid-template-rows: repeat(3, 30vw);
+}
+
+.tile {
+    background-color: rgb(64, 175, 250);
+    border: solid;
+    border-color: azure;
+    margin: auto;
+    line-height: 0.81;
+    padding: 0;
+    margin: 0;
+}
