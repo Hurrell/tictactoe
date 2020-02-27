@@ -1,25 +1,70 @@
+html {
+    background-color: whitesmoke;
+    border-color: whitesmoke;
+    font-family: 'Roboto';
+    align-content: center;
+}
+
 main{
     font-family: 'Krona One';
     align-content: center;
-    background-color: azure
+    
 }
 
-#board {
-    color: azure;
+#logo {
+    justify-content: center;
+    color: rgb(64, 175, 250);
+    background-color: whitesmoke;
     /* margin: 40px; */
     text-align: center;
-    font-size: 30vw;
+    font-size: 45px;
     display: grid;
-    grid-template-columns: repeat(3, 30vw);
-    grid-template-rows: repeat(3, 30vw);
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: 50px;
+    padding: 0;
+    margin: 0;
+}
+
+#logo div {
+    border: solid;
+    border-color: whitesmoke;
+    background-color: whitesmoke;
+    /* margin: auto; */
+    /* line-height: 0.81; */
+
+}
+#board {
+    justify-content: center;
+    color: whitesmoke;
+    /* margin: 40px; */
+    text-align: center;
+    font-size: 100px;
+    /* max-width: 500px; */
+    display: grid;
+    grid-template-columns: repeat(3,100px);
+    grid-template-rows: repeat(3, 100px); 
 }
 
 .tile {
     background-color: rgb(64, 175, 250);
     border: solid;
-    border-color: azure;
+    border-color: whitesmoke;
     margin: auto;
     line-height: 0.81;
     padding: 0;
     margin: 0;
+}
+
+#status {
+    color: rgb(64, 175, 250);
+    font-size: 55px;
+    text-align: center;
+}
+#reset {
+    background-color: rgb(64, 175, 250);
+    color: whitesmoke;
+    width: 110px;
+    align-content: center;
+    display: inline-block;
+    font-size: 40px;
 }

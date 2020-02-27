@@ -12,6 +12,15 @@ const gameBoard = (() => {
             return false;
         };
     };
+    const board = () => {
+        let board = [["","",""],["","",""],["","",""]];
+        for (let i in boardValues) {
+            for (let j in boardValues) {
+                board[i][j]=boardValues[i][j];
+            };
+        };
+        return board;
+    };
     const isWinner = (player) => {
         const isSame = (array,symbol) => {
             return !array.some(function(value){
@@ -42,6 +51,7 @@ const gameBoard = (() => {
         };
         return false;
     }
+
     //iterate through the board array and render on screen
     const render = function (target) {
         //first make sure main div is clear
@@ -61,11 +71,16 @@ const gameBoard = (() => {
             };
         };
     };
+    const reset = () => {
+        boardValues = [["","",""],["","",""],["","",""]];
+    }
     return {
         getValue,
         changeValue,
         render,
         isWinner,
+        reset,
+        board,
     };
 })();
 
@@ -91,6 +106,15 @@ const game = (() => {
     const user = Player("x");
     const pc = Player("o");
 
+    const reset = () => {
+        let tiles = Array.from(document.querySelectorAll('.tile'));
+        tiles.forEach((event)=>{event.textContent = ""});
+        let status = document.querySelector('#status');
+        while (status.firstChild) {
+            status.removeChild(status.firstChild);
+        }
+        gameBoard.reset();
+    }
     const addUserMove = (event) => {
         if (event.target.classList == "tile") {
             let column = event.target.dataset.column;
@@ -103,6 +127,71 @@ const game = (() => {
     };
 
     const pcMove = () => {
+
+        let board = gameBoard.board();
+        let rows = [];
+        let columns = [["","",""],["","",""],["","",""],];
+        for (let i in board) {
+            rows.push(board[i]);
+        }
+        for (let i in board) {
+            for (let j in board[i]) {
+                columns[j][i] = board[i][j];
+            }
+        }
+        for (let i in rows) {
+            let countX = (rows[i].filter((e) => e.includes('x'))).length;
+            let countO = (rows[i].filter((e) => e.includes('o'))).length;
+            if (countO >= 2) {
+                for (let j in rows[i]) {
+                    if (rows[i][j]==""){
+                        pc.play(i,j);
+                        gameBoard.render(boardLocation);
+                        nextTurn(pc);
+                        return true;
+                    }
+                }
+            }
+            if (countX >= 2) {
+                for (let j in rows[i]) {
+                    if (rows[i][j]==""){
+                        pc.play(i,j);
+                        gameBoard.render(boardLocation);
+                        nextTurn(pc);
+                        return true;
+                    }
+                }
+            }
+        }
+        for (let j in columns) {
+            let countX = (columns[j].filter((e) => e.includes('x'))).length;
+            let countO = (columns[j].filter((e) => e.includes('o'))).length;
+
+            if (countO >= 2) {
+                for (let i in columns[j]) {
+                    if (columns[j][i]==""){
+                        pc.play(i,j);
+                        gameBoard.render(boardLocation);
+                        nextTurn(pc);
+                        return true;
+                    }
+                }
+            }
+            if (countX >= 2) {
+                for (let i in columns[j]) {
+                    if (columns[j][i]==""){
+                        pc.play(i,j);
+                        gameBoard.render(boardLocation);
+                        nextTurn(pc);
+                        return true;
+                    }
+                }
+            }
+        }
+
+
+
+
         let availTiles = [];
         for(let i =0; i<3;i++) {
             for(let j = 0; j<3; j++) {
@@ -112,7 +201,7 @@ const game = (() => {
                 };
             };
         };
-        let choice = Math.floor(Math.random() * (availTiles.length - 0 + 1)) + 0;
+        let choice = Math.floor(Math.random() * availTiles.length);
         if (pc.play(availTiles[choice][0],availTiles[choice][1])) {
             gameBoard.render(boardLocation);
             nextTurn(pc);
@@ -120,9 +209,20 @@ const game = (() => {
         };
     };
 
+    const displayWinner = (winner) => {
+        let display = document.querySelector("#status");
+        let message = document.createElement('div');
+        message.textContent = `${winner.getType()} Wins!`;
+        display.appendChild(message);
+        let resetButton = document.createElement("div");
+        resetButton.setAttribute('id','reset');
+        resetButton.textContent = "Reset";
+        display.appendChild(resetButton);
+        display.addEventListener('click',reset);
+    }
     const nextTurn = (currentPlayer) => {
         if(gameBoard.isWinner(currentPlayer)) {
-            console.log(currentPlayer.getType() + ' wins!');
+            displayWinner(currentPlayer);
         } else {
             switch(currentPlayer.getType()) {
                 case user.getType():
@@ -132,12 +232,6 @@ const game = (() => {
                     break;
             }
         }
-
-    }
-    const getGameResult = () => {
-        //check 3 in a row
-        //check 3 in a column
-        //check diags
     }
     let boardLocation = document.querySelector("#board");
     gameBoard.render(boardLocation);
